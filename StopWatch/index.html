@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-image: url('pink flowers.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: 'Arial', sans-serif;
+            color: #333; /* Text color */
+        }
+        .container {
+            background-color: #FFC0CB; /* Light Pink */
+            width: 40%;
+            min-width: 500px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            padding: 20px 0;
+            padding-bottom: 50px;
+            border-radius: 10px;
+            border: 2px solid white; /* White Border */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
+        }
+        .timerDisplay {
+            position: relative;
+            width: 92%;
+            background: #808080; /* Gray */
+            left: 4%;
+            padding: 40px 0;
+            color: #fff;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 139, 253, 0.25);
+        }
+        .buttons {
+            width: 90%;
+            margin: 60px auto 0 auto;
+            display: flex;
+            justify-content: space-around;
+        }
+        .buttons button {
+            width: 120px;
+            height: 45px;
+            background-color: #333; /* Dark Gray Buttons */
+            color: #fff; /* White Text */
+            font-family: 'Helvetica', sans-serif;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s;
+        }
+        .buttons button:nth-last-child(2) {
+            background-color: #d23332; /* Red for Pause */
+        }
+        .buttons button:nth-last-child(1) {
+            background-color: #20b380; /* Green for Start */
+        }
+        .buttons button:nth-last-child(3) {
+            background-color: #000; /* Black for Reset */
+        }
+        .buttons button:hover {
+            background-color: #555; /* Darken on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timerDisplay">
+            00 : 00 : 00 : 000
+        </div>
+        <div class="buttons">
+            <button id="pauseTimer">Pause</button>
+            <button id="startTimer">Start</button>
+            <button id="resetTimer">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+        let timerRef = document.querySelector('.timerDisplay');
+        let int = null;
+
+        document.getElementById('startTimer').addEventListener('click', () => {
+            if (int !== null) {
+                clearInterval(int);
+            }
+            int = setInterval(displayTimer, 10);
+        });
+
+        document.getElementById('pauseTimer').addEventListener('click', () => {
+            clearInterval(int);
+        });
+
+        document.getElementById('resetTimer').addEventListener('click', () => {
+            clearInterval(int);
+            [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+            timerRef.innerHTML = '00 : 00 : 00 : 000 ';
+        });
+
+        function displayTimer() {
+            milliseconds += 10;
+            if (milliseconds == 1000) {
+                milliseconds = 0;
+                seconds++;
+                if (seconds == 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes == 60) {
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+                let h = hours < 10 ? "0" + hours : hours;
+                let m = minutes < 10 ? "0" + minutes : minutes;
+                let s = seconds < 10 ? "0" + seconds : seconds;
+                let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+                timerRef.innerHTML = ` ${h} : ${m} : ${s} : ${ms}`;
+            }
+        }
+    </script>
+</body>
+</html>
